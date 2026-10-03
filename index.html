@@ -765,7 +765,7 @@ function xView(){
  <div class="mu" id="xn" style="margin:6px 0;font-size:12px"></div>
  <div class="exp" style="justify-content:flex-start"><button class="on" id="xb" onclick="xRun()">استخراج الجداول</button><button id="xc" style="display:none" onclick="xStop()">إيقاف</button></div>
  <div class="mu" id="xt" style="margin-top:4px;font-size:13px"></div><div class="xr" id="xr"></div>
- ${w?"":`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:8px"><button id="xg" onclick="xDanger()">استرجاع الجداول الأصلية المدمجة</button></div>`}</div>`;
+ ${w?"":`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:8px"><button class="on" onclick="exportData()">⬇ تجهيز data.json للنشر لكل المعلمين</button> <button id="xg" onclick="xDanger()">استرجاع الجداول الأصلية المدمجة</button></div>`}</div>`;
 }
 function xInit(){
  if(SMPR&&!SMP)xt("الميزة دي مش متاحة في العرض الحالي، افتح الصفحة من Claude");
