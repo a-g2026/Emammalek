@@ -494,10 +494,10 @@ function alerts(){
   for(const l of ls){
    const [h1,m1,h2,m2]=PS[l.p-1],st=h1*60+m1,en=h2*60+m2;
    if(mn>=st&&mn<en){out.push(["now",`حصتك الآن: الحصة ${l.p} – ${l.c} (حتى ${h2>12?h2-12:h2}:${f2(m2)})`]);break}
-   if(mn<st){const df=st-mn,k=now.toDateString()+l.p;out.push([df<=LEAD?"hot":"nx",`حصتك القادمة: الحصة ${l.p} – ${l.c} بعد ${df} دقيقة`]);
+   if(mn<st){if(mn<360||mn>795)break;const df=st-mn,k=now.toDateString()+l.p,hh=Math.floor(df/60),mm=df%60,rem=hh?`${hh==1?"ساعة":hh==2?"ساعتين":hh+" ساعات"}${mm?` و${mm} دقيقة`:""}`:`${mm} دقيقة`;out.push([df<=LEAD?"hot":"nx",`حصتك القادمة: الحصة ${l.p} – ${l.c} بعد ${rem}`]);
     if(df<=LEAD&&!fired[k]){fired[k]=1;notify("حصتك بعد "+df+" دقيقة","الحصة "+l.p+" – "+l.c)}break}
   }
-  if(!out.length&&ls.length)out.push(["nx","انتهت حصصك اليوم"]);
+  if(!out.length&&ls.length){const q=PS[ls[ls.length-1].p-1];if(mn>=q[2]*60+q[3])out.push(["nx","انتهت حصصك اليوم"])}
   NOTES.filter(n=>(n.to==ME||n.to=="all")&&n.kind!="msg"&&n.day==d).forEach(n=>{const k="n"+n.id;out.push(["hot",`${KIND[n.kind]} من أ/${n.from} اليوم${n.period?" – الحصة "+n.period:""}${n.text?" – "+n.text:""}`]);if(!fired[k]){fired[k]=1;notify(KIND[n.kind]+" من أ/"+n.from,n.text||"")}})
  }
  el.innerHTML=out.map(([c,x])=>`<div class="${c}">${esc(x)}</div>`).join("");
@@ -768,7 +768,7 @@ function xView(){
  ${w?"":`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:8px"><button class="on" onclick="exportData()">⬇ تجهيز data.json للنشر لكل المعلمين</button> <button id="xg" onclick="xDanger()">استرجاع الجداول الأصلية المدمجة</button></div>`}</div>`;
 }
 function xInit(){
- if(SMPR&&!SMP)xt("الميزة دي مش متاحة في العرض الحالي، افتح الصفحة من Claude");
+ if(SMPR&&!SMP)xt("استخراج الجداول بالذكاء الاصطناعي مش بيشتغل في نسخة GitHub. حدّث الجداول من رابط Claude، وبعدها اضغط «تجهيز data.json» وارفعه هنا على GitHub");
  else if(SMPR&&CAPS&&!CAPS.images)xt("رفع الصور مش متاح في العرض الحالي");
 }
 // ===== PDF → صور =====
@@ -855,7 +855,7 @@ const XP2=`أنت بتقرأ صور جداول حصص مدرسية لمعلمي�
 {"teachers":[{"n":"اسم المعلم","s":"المادة","d":["1:11ع/6 4:12ع/5","5:12ع/7","","1:12ع/7 3:11ع/6","2:12ع/7"]}]}`;
 async function xRun(){
  if(X.busy||!isOwner())return;
- if(!SMP){xt(SMPR?"الميزة دي مش متاحة في العرض الحالي، افتح الصفحة من Claude":"لحظة، لسه بجهّز الميزة... جرّب تاني بعد ثواني");return}
+ if(!SMP){xt(SMPR?"استخراج الجداول بالذكاء الاصطناعي مش بيشتغل في نسخة GitHub. حدّث الجداول من رابط Claude، وبعدها اضغط «تجهيز data.json» وارفعه هنا على GitHub":"لحظة، لسه بجهّز الميزة... جرّب تاني بعد ثواني");return}
  if(CAPS&&!CAPS.images){xt("رفع الصور مش متاح في العرض الحالي");return}
  if(!X.files.length){xt("اختار ملف الجدول الأول (PDF أو صور)");return}
  const w=tab=="w";
