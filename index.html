@@ -603,7 +603,7 @@ function gateHtml(){
   const L=GS.d!==""?SETS[+GS.d].raw.map(t=>t.n):[],st="width:100%;padding:9px;font-size:15px;margin-top:8px";
   f=`<select style="${st}" onchange="GS.d=this.value;GS.n='';render()"><option value="">اختر القسم</option>${SETS.map((x,i)=>`<option value="${i}" ${GS.d===String(i)?"selected":""}>${esc(x.dept)}</option>`).join("")}</select>`+(GS.d!==""?`<select style="${st}" onchange="GS.n=this.value"><option value="">اختر اسمك</option>${L.map(n=>`<option ${GS.n==n?"selected":""}>${esc(n)}</option>`).join("")}</select>`:"");
  }else if(r)f=`<input type="text" style="width:100%;margin-top:8px" placeholder="اسمك" value="${esc(GS.n)}" oninput="GS.n=this.value"><input type="password" inputmode="numeric" style="width:100%;margin-top:8px" placeholder="رمز الإدارة" oninput="GS.pin=this.value">`;
- return `<div class="card"><b>أهلًا بيك 👋</b><div class="mu" style="margin:4px 0 8px">اختر منصبك واسمك للدخول. الاختيار بيتأكد مرة واحدة ومش بيتغير بعد كده.</div><div class="chips">${["t","a"].map(k=>`<button class="${r==k?"on":""}" onclick="GS.r='${k}';GS.n='';GS.d='';render()">${RL[k]}</button>`).join("")}</div>${f}${GS.err?`<div style="color:#b91c1c;margin-top:8px;font-size:13px">${GS.err}</div>`:""}<div class="exp" style="justify-content:center;margin-top:10px"><button class="on" onclick="gNext()">متابعة</button></div><div style="text-align:center;margin-top:12px"><a href="#" class="mu" onclick="GS.own=!GS.own;render();return false">🔑 دخول صاحب البرنامج</a></div>${GS.own?`<div style="margin-top:8px;display:flex;gap:6px"><input type="password" id="oc" inputmode="numeric" placeholder="رمز صاحب البرنامج"><button class="on" onclick="gOwn()">دخول</button></div>`:""}</div>`;
+ return `<div class="card"><b>أهلًا بيك 👋</b><div class="mu" style="margin:4px 0 8px">اختر منصبك واسمك للدخول. الاختيار بيتأكد مرة واحدة ومش بيتغير بعد كده.</div><div class="chips">${["t","a"].map(k=>`<button class="${r==k?"on":""}" onclick="GS.r='${k}';GS.n='';GS.d='';render()">${RL[k]}</button>`).join("")}</div>${f}${GS.err?`<div style="color:#b91c1c;margin-top:8px;font-size:13px">${GS.err}</div>`:""}<div class="exp" style="justify-content:center;margin-top:10px"><button class="on" onclick="gNext()">متابعة</button></div><div style="text-align:center;margin-top:10px;font-size:10.5px;opacity:.5">بيتسجل اختيارك للاسم والقسم لمتابعة عدد المستخدمين فقط</div><div style="text-align:center;margin-top:12px"><a href="#" class="mu" onclick="GS.own=!GS.own;render();return false">🔑 دخول صاحب البرنامج</a></div>${GS.own?`<div style="margin-top:8px;display:flex;gap:6px"><input type="password" id="oc" inputmode="numeric" placeholder="رمز صاحب البرنامج"><button class="on" onclick="gOwn()">دخول</button></div>`:""}</div>`;
 }
 function gNext(){
  const r=GS.r;
@@ -618,8 +618,11 @@ function gOwn(){
  if(hsh((($("oc")||{}).value||"").trim())==OWNH){ID={role:"o",n:"صاحب البرنامج",di:""};try{localStorage.setItem("idn2",JSON.stringify(ID))}catch(e){}tab="m";LT=null;render()}
  else{GS.err="الرمز غير صحيح";render()}
 }
+const REG_URL="https://docs.google.com/forms/d/e/1FAIpQLScuCR0lojIT3gZILd-BDXncxkxmS1bc2degAk_GJDYhpNTgxA/formResponse",REG_N="entry.1630950175",REG_D="entry.1830381086";
+function regSend(n,d){if(PV)return;try{if(localStorage.getItem("reg1")==n)return}catch(e){}try{const b=new URLSearchParams();b.append(REG_N,n);b.append(REG_D,d);fetch(REG_URL,{method:"POST",mode:"no-cors",body:b}).then(()=>{try{localStorage.setItem("reg1",n)}catch(e){}}).catch(()=>{})}catch(e){}}
 function gOk(){
  ID={role:GS.r,n:GS.n,di:GS.r=="t"?SETS[+GS.d].id:""};
+ if(ID.role=="t")regSend(ID.n,SETS[+GS.d].dept);
  if(!PV)try{localStorage.setItem("idn2",JSON.stringify(ID))}catch(e){}
  tab=ID.role=="t"?"m":"a";LT=null;render();
 }
