@@ -150,6 +150,8 @@ input[type=file]{font:inherit;font-size:13px;max-width:100%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f766e">
 </head>
 <body>
 <div id="hrow"><div id="hl"><h1 id="h1"></h1></div><span id="hb"></span></div>
@@ -933,5 +935,6 @@ try{history.replaceState({root:1,d:0},"");addEventListener("popstate",e=>{const 
 $("hb").innerHTML='<button class="ib" id="pvb" onclick="togglePV()" title="معاينة كمعلم" style="display:none">'+IC.eye+'</button><button class="ib" onclick="goHome()" title="الرئيسية">'+IC.home+'</button><button class="ib" onclick="doUpd()" title="تحديث الجداول">'+IC.ref+'</button><button class="ib" onclick="doExit()" title="خروج">'+IC.out+'</button>';
 render();clk();setInterval(clk,15000);showWelcome();loadRemote(false);setTimeout(guard,1500);
 </script>
+<script>if("serviceWorker"in navigator&&location.protocol.indexOf("http")==0)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
 </body>
 </html>
